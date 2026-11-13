@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  <!-- Modelo de dados da tabela: id, data, descrição, categoria, membro e valor (já formatados) -->
+  <object class="GtkListStore" id="lst_lancamentos">
+    <columns>
+      <column type="gint64"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkWindow" id="janela">
+    <property name="title">Finanças da Família</property>
+    <property name="default-width">820</property>
+    <property name="default-height">660</property>
+    <property name="window-position">center</property>
+    <child>
+      <object class="GtkBox" id="box_janela">
+        <property name="orientation">vertical</property>
+        <!-- ===== Barra de menu ===== -->
+        <child>
+          <object class="GtkMenuBar" id="mnb_principal">
+            <child>
+              <object class="GtkMenuItem" id="mni_cadastros">
+                <property name="label">_Cadastros</property>
+                <property name="use-underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="mnu_cadastros">
+                <child>
+                  <object class="GtkMenuItem" id="mni_lancamentos">
+                    <property name="label">_Lançamentos</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkMenuItem" id="mni_usuarios">
+                    <property name="label">_Usuários</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparatorMenuItem" id="sep_cadastros"/>
+                </child>
+                <child>
+                  <object class="GtkMenuItem" id="mni_sair">
+                    <property name="label">_Sair</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkMenuItem" id="mni_ajuda">
+                <property name="label">_Ajuda</property>
+                <property name="use-underline">True</property>
+                <child type="submenu">
+                  <object class="GtkMenu" id="mnu_ajuda">
+                <child>
+                  <object class="GtkMenuItem" id="mni_sobre">
+                    <property name="label">_Sobre</property>
+                    <property name="use-underline">True</property>
+                  </object>
+                </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <!-- ===== Conteúdo da tela ===== -->
+        <child>
+          <object class="GtkBox" id="box_principal">
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <property name="vexpand">True</property>
+            <property name="margin-start">16</property>
+            <property name="margin-end">16</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">16</property>
+            <child>
+              <object class="GtkLabel" id="lbl_titulo">
+                <property name="label">&lt;b&gt;Lançamentos&lt;/b&gt;</property>
+                <property name="use-markup">True</property>
+                <property name="xalign">0</property>
+              </object>
+            </child>
+            <!-- Pesquisa por período -->
+            <child>
+              <object class="GtkBox" id="box_pesquisa">
+                <property name="spacing">8</property>
+                <child>
+                  <object class="GtkLabel" id="lbl_periodo">
+                    <property name="label">Período: de</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="ent_data_inicial">
+                    <property name="width-chars">11</property>
+                    <property name="max-length">10</property>
+                    <property name="placeholder-text">dd/mm/aaaa</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbl_ate">
+                    <property name="label">até</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="ent_data_final">
+                    <property name="width-chars">11</property>
+                    <property name="max-length">10</property>
+                    <property name="placeholder-text">dd/mm/aaaa</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btn_buscar">
+                    <property name="label">Buscar</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btn_todos">
+                    <property name="label">Mostrar todos</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btn_gerar_pdf">
+                    <property name="label">Gerar PDF</property>
+                    <property name="tooltip-text">Gera um relatório em PDF dos lançamentos da tabela (próxima aula)</property>
+                  </object>
+                  <packing>
+                    <property name="pack-type">end</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <!-- Tabela de lançamentos -->
+            <child>
+              <object class="GtkScrolledWindow" id="scr_tabela">
+                <property name="vexpand">True</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="tvw_lancamentos">
+                    <property name="model">lst_lancamentos</property>
+                <child>
+                  <object class="GtkTreeViewColumn" id="col_id">
+                    <property name="title">Id</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="rnd_id">
+                      </object>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="col_data">
+                    <property name="title">Data</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="rnd_data">
+                      </object>
+                      <attributes>
+                        <attribute name="text">1</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="col_descricao">
+                    <property name="title">Descrição</property>
+                    <property name="expand">True</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="rnd_descricao">
+                      </object>
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="col_categoria">
+                    <property name="title">Categoria</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="rnd_categoria">
+                      </object>
+                      <attributes>
+                        <attribute name="text">3</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="col_membro">
+                    <property name="title">Membro</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="rnd_membro">
+                      </object>
+                      <attributes>
+                        <attribute name="text">4</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="col_valor">
+                    <property name="title">Valor</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="rnd_valor">
+                        <property name="xalign">1</property>
+                      </object>
+                      <attributes>
+                        <attribute name="text">5</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <!-- Formulário do lançamento -->
+            <child>
+              <object class="GtkGrid" id="grd_formulario">
+                <property name="row-spacing">8</property>
+                <property name="column-spacing">12</property>
+            <child>
+              <object class="GtkLabel" id="lbl_data">
+                <property name="label">Data</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="ent_data">
+                <property name="hexpand">True</property>
+                <property name="max-length">10</property>
+                <property name="placeholder-text">dd/mm/aaaa</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">0</property>
+                <property name="width">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbl_valor">
+                <property name="label">Valor (R$)</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="ent_valor">
+                <property name="hexpand">True</property>
+                <property name="max-length">12</property>
+                <property name="placeholder-text">Ex.: 45,90</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">0</property>
+                <property name="width">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbl_descricao">
+                <property name="label">Descrição</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkEntry" id="ent_descricao">
+                <property name="hexpand">True</property>
+                <property name="max-length">100</property>
+                <property name="placeholder-text">Ex.: Supermercado</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">1</property>
+                <property name="width">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbl_categoria">
+                <property name="label">Categoria</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">0</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="cmb_categoria">
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">1</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbl_membro">
+                <property name="label">Membro</property>
+                <property name="xalign">0</property>
+              </object>
+              <packing>
+                <property name="left-attach">2</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBoxText" id="cmb_usuario">
+                <property name="hexpand">True</property>
+              </object>
+              <packing>
+                <property name="left-attach">3</property>
+                <property name="top-attach">2</property>
+              </packing>
+            </child>
+              </object>
+            </child>
+            <!-- Botões -->
+            <child>
+              <object class="GtkBox" id="box_botoes">
+                <property name="spacing">8</property>
+                <property name="homogeneous">True</property>
+            <child>
+              <object class="GtkButton" id="btn_gravar">
+                <property name="label">Gravar</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="btn_editar">
+                <property name="label">Editar</property>
+                <property name="sensitive">False</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="btn_excluir">
+                <property name="label">Excluir</property>
+                <property name="sensitive">False</property>
+              </object>
+            </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="lbl_mensagem">
+                <property name="label">Preencha os campos e clique em Gravar para adicionar um lançamento.</property>
+                <property name="xalign">0</property>
+                <property name="wrap">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

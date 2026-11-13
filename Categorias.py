@@ -37,6 +37,8 @@ class Aplicacao:
 
         #Ligação dos botões
         self.btn_gravar.connect("clicked", self.ao_gravar)
+        self.btn_editar.connect("clicked", self.ao_editar)
+        self.btn_excluir.connect("clicked", self.ao_excluir)
 
     def mostrar_mensagem(self, texto):
         self.lbl_mensagem.set_text(texto)
